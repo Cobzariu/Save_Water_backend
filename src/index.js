@@ -6,7 +6,6 @@ const authRoutes = require("./routes/authRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
-
 app.use(bodyParser.json());
 app.use(authRoutes);
 
