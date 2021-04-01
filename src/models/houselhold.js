@@ -9,7 +9,7 @@ const householdSchema = new mongoose.Schema({
   bowlWashing: Boolean,
   dishwasherNumberWeek: Number,
   toiletDualFlush: Boolean,
-  washCarNumberWeek: Boolean,
+  washCarNumberWeek: Number,
   waterGardenNumberWeek: Number,
   waterGardenLength: Number,
   collectRainwater: Boolean,
