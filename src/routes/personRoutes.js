@@ -46,7 +46,7 @@ router.post("/person", async (req, res) => {
       householdId: household._id,
     });
     await person.save();
-    res.send(person);
+    res.send({person});
   } catch (err) {
     res.status(422).send({ error: err.message });
   }
