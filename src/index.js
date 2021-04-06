@@ -1,12 +1,14 @@
 require("./models/user");
 require("./models/person");
 require("./models/houselhold");
+require("./models/usage");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const householdRoutes = require("./routes/householdRoutes");
 const personRoutes = require("./routes/personRoutes");
+const usageRoutes = require("./routes/usageRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
@@ -14,6 +16,7 @@ app.use(bodyParser.json());
 app.use(authRoutes);
 app.use(householdRoutes);
 app.use(personRoutes);
+app.use(usageRoutes);
 
 const mongoUri =
   "mongodb+srv://admin:passwordpassword@cluster0.grsfl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
