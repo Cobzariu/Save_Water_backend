@@ -17,13 +17,21 @@ router.get("/usage", async (req, res) => {
       .send({ error: "Could not find household for the user" });
   }
   const household = households[0];
-  const usages = await Usage.find({householdId: household._id});
-  res.send({usages});
+  const usages = await Usage.find({ householdId: household._id }).sort(
+    "year month"
+  );
+  res.send({ usages });
 });
 
 router.post("/usage", async (req, res) => {
   const { amount, year, month } = req.body;
   const households = await Household.find({ userId: req.user._id });
+  if (amount.length === 0) {
+    return res.status(422).send({ error: "Amount is empty" });
+  }
+  if (isNaN(Number.parseFloat(amount)) || amount.includes(",") === true) {
+    return res.status(422).send({ error: "Amount is not a number" });
+  }
   if (households.length === 0) {
     return res
       .status(422)
@@ -33,7 +41,7 @@ router.post("/usage", async (req, res) => {
   const usages = await Usage.find({ month, year });
   if (usages.length > 0) {
     return res.status(422).send({
-      error: "You already added consumption data for this month and year",
+      error: "You already added consumption data\n for this month and year",
     });
   }
   try {
