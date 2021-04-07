@@ -23,10 +23,9 @@ router.get("/usage", async (req, res) => {
   res.send({ usages });
 });
 
-router.delete("/usage", async (req, res) => {
-  const { usage_id } = req.body;
+router.delete("/usage/:id", async (req, res) => {
+  const usage_id  = req.params.id;
   const delete_response = await Usage.deleteOne({ _id: usage_id });
-  console.log(delete_response);
   if (delete_response.ok === 1 && delete_response.n === 1)
     return res.status(204).send();
   else return res.status(422).send({ error: "Could not delete usage" });
