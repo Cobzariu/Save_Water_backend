@@ -17,8 +17,8 @@ router.get("/person", async (req, res) => {
       .send({ error: "Could not find household for the user" });
   }
   const household = households[0];
-  const persons = await Person.find({ householdId: household._id });
-  res.send({ persons });
+  const people = await Person.find({ householdId: household._id });
+  res.send({ people });
 });
 
 router.post("/person", async (req, res) => {
