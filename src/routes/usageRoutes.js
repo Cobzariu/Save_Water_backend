@@ -24,7 +24,7 @@ router.get("/usage", async (req, res) => {
 });
 
 router.delete("/usage/:id", async (req, res) => {
-  const usage_id  = req.params.id;
+  const usage_id = req.params.id;
   const delete_response = await Usage.deleteOne({ _id: usage_id });
   if (delete_response.ok === 1 && delete_response.n === 1)
     return res.status(204).send();
@@ -46,7 +46,7 @@ router.post("/usage", async (req, res) => {
       .send({ error: "Could not find household for the user" });
   }
   const household = households[0];
-  const usages = await Usage.find({ month, year });
+  const usages = await Usage.find({ householdId: household._id, month, year });
   if (usages.length > 0) {
     return res.status(422).send({
       error: "You already added consumption data\n for this month and year",
