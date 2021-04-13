@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const householdRoutes = require("./routes/householdRoutes");
 const personRoutes = require("./routes/personRoutes");
 const usageRoutes = require("./routes/usageRoutes");
+const adviceRoutes = require("./routes/adviceRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(authRoutes);
 app.use(householdRoutes);
 app.use(personRoutes);
 app.use(usageRoutes);
+app.use(adviceRoutes);
 
 const mongoUri =
   "mongodb+srv://admin:passwordpassword@cluster0.grsfl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
