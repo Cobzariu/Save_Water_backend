@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const requireAuth = require("../middlewares/requireAuth");
-const Advice = require("../models/advice");
 
+const Advice = require("../models/advice");
+const Usage = mongoose.model("Usage");
 const Person = mongoose.model("Person");
 const Household = mongoose.model("Household");
 const router = express.Router();
@@ -16,19 +17,19 @@ router.get("/advice", async (req, res) => {
   const people = await Person.find({ householdId: household._id });
 
   // Average shower length and frequency
-  var averageLength = 0,
+  var averageShowerLength = 0,
     averageShowerFrequency = 0,
     averageBathFrequency = 0;
   people.forEach((element) => {
-    averageLength += element.showerLengthMinutes;
+    averageShowerLength += element.showerLengthMinutes;
     averageShowerFrequency += element.showerNumberWeek;
     averageBathFrequency += element.bathNumberWeek;
   });
-  averageLength /= people.length;
+  averageShowerLength /= people.length;
   averageShowerFrequency /= people.length;
   averageBathFrequency /= people.length;
   people.forEach((element) => {
-    if (element.showerLengthMinutes > averageLength) {
+    if (element.showerLengthMinutes > averageShowerLength) {
       let advice = new Advice(
         element.name + " should reduce the length of a shower",
         "person",
@@ -101,7 +102,25 @@ router.get("/advice", async (req, res) => {
       advices.push(advice);
     }
   }
-  res.send({ advices });
+  //Statistics
+  averageShowerLength = Math.round(averageShowerLength);
+  averageBathFrequency = Math.round(averageBathFrequency);
+  averageShowerFrequency = Math.round(averageShowerFrequency);
+
+  const usages = await Usage.find({ householdId: household._id }).sort(
+    "year month"
+  );
+  const lastUsage = usages[usages.length - 1];
+  const waterUsedPerCapitaLiters = Math.round((lastUsage.amount * 1000) / (30 * people.length));
+  res.send({
+    advices,
+    statistics: {
+      averageShowerLength,
+      averageBathFrequency,
+      averageShowerFrequency,
+      waterUsedPerCapitaLiters,
+    },
+  });
 });
 
 module.exports = router;
