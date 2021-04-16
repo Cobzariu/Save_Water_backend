@@ -21,6 +21,62 @@ router.get("/person", async (req, res) => {
   res.send({ people });
 });
 
+router.post("/person/new", async (req, res) => {
+  const {
+    name,
+    showerNumberWeek,
+    bathNumberWeek,
+    showerLengthMinutes,
+    waterRunningBrushingTeeth,
+  } = req.body;
+  const households = await Household.find({ userId: req.user._id });
+  if (households.length === 0) {
+    return res
+      .status(422)
+      .send({ error: "Could not find household for the user" });
+  }
+  const household = households[0];
+  await Household.updateOne(
+    { userId: req.user._id },
+    { personNumber: household.personNumber + 1 }
+  );
+  try {
+    const person = new Person({
+      name,
+      showerNumberWeek,
+      bathNumberWeek,
+      showerLengthMinutes,
+      waterRunningBrushingTeeth,
+      householdId: household._id,
+    });
+    await person.save();
+    res.send({ person });
+  } catch (err) {
+    res.status(422).send({ error: err.message });
+  }
+});
+
+router.delete("/person/:id", async (req, res) => {
+  const households = await Household.find({ userId: req.user._id });
+  if (households.length === 0) {
+    return res
+      .status(422)
+      .send({ error: "Could not find household for the user" });
+  }
+  const household = households[0];
+
+  const person_id = req.params.id;
+  const delete_response = await Person.deleteOne({ _id: person_id });
+
+  if (delete_response.ok === 1 && delete_response.n === 1) {
+    await Household.updateOne(
+      { userId: req.user._id },
+      { personNumber: household.personNumber - 1 }
+    );
+    return res.status(204).send();
+  } else return res.status(422).send({ error: "Could not delete usage" });
+});
+
 router.post("/person", async (req, res) => {
   const {
     name,
@@ -46,7 +102,7 @@ router.post("/person", async (req, res) => {
       householdId: household._id,
     });
     await person.save();
-    res.send({person});
+    res.send({ person });
   } catch (err) {
     res.status(422).send({ error: err.message });
   }
