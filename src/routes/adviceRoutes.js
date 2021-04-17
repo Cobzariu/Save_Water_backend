@@ -33,7 +33,7 @@ router.get("/advice", async (req, res) => {
       let advice = new Advice(
         element.name + " should reduce the length of a shower",
         "person",
-        3
+        1
       );
       advices.push(advice);
     }
@@ -42,7 +42,7 @@ router.get("/advice", async (req, res) => {
         let advice = new Advice(
           element.name + " should reduce the frequency of showers",
           "person",
-          3
+          1
         );
         advices.push(advice);
       }
@@ -50,7 +50,7 @@ router.get("/advice", async (req, res) => {
         let advice = new Advice(
           element.name + " should reduce the frequency of baths",
           "person",
-          3
+          1
         );
         advices.push(advice);
       }
@@ -70,7 +70,7 @@ router.get("/advice", async (req, res) => {
     let advice = new Advice(
       "You could use a bowl to rinse your dishes",
       "household",
-      1
+      3
     );
     advices.push(advice);
   }
@@ -78,7 +78,7 @@ router.get("/advice", async (req, res) => {
     let advice = new Advice(
       "Consider upgrading your toilets to dual flush ones",
       "household",
-      1
+      3
     );
     advices.push(advice);
   }
@@ -89,7 +89,7 @@ router.get("/advice", async (req, res) => {
       let advice = new Advice(
         "Consider collecting and using rainwater",
         "household",
-        1
+        3
       );
       advices.push(advice);
     }
