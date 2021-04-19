@@ -13,6 +13,41 @@ router.get("/household", async (req, res) => {
   res.send({ household: households[0] });
 });
 
+router.put("/household", async (req, res) => {
+  const {
+    locationTypeHouse,
+    washingMachineNumberWeek,
+    washingMachineFullLoad,
+    washHandNumberWeek,
+    bowlWashing,
+    dishwasherNumberWeek,
+    toiletDualFlush,
+    washCarNumberWeek,
+    waterGardenNumberWeek,
+    waterGardenLength,
+    collectRainwater,
+  } = req.body;
+  const households = await Household.find({ userId: req.user._id });
+  const household = households[0];
+  const updateHousehold = await Household.findOneAndUpdate(
+    { _id: household._id },
+    {
+      locationTypeHouse: locationTypeHouse,
+      washingMachineNumberWeek: washingMachineNumberWeek,
+      washingMachineFullLoad: washingMachineFullLoad,
+      washHandNumberWeek: washHandNumberWeek,
+      bowlWashing: bowlWashing,
+      dishwasherNumberWeek: dishwasherNumberWeek,
+      toiletDualFlush: toiletDualFlush,
+      washCarNumberWeek: washCarNumberWeek,
+      waterGardenNumberWeek: waterGardenNumberWeek,
+      waterGardenLength: waterGardenLength,
+      collectRainwater: collectRainwater,
+    }
+  );
+  return res.status(204).send();
+});
+
 router.post("/household", async (req, res) => {
   const {
     locationTypeHouse,
