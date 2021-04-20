@@ -34,12 +34,6 @@ router.delete("/usage/:id", async (req, res) => {
 router.post("/usage", async (req, res) => {
   const { amount, year, month } = req.body;
   const households = await Household.find({ userId: req.user._id });
-  if (amount.length === 0) {
-    return res.status(422).send({ error: "Amount is empty" });
-  }
-  if (isNaN(Number.parseFloat(amount)) || amount.includes(",") === true) {
-    return res.status(422).send({ error: "Amount is not a number" });
-  }
   if (households.length === 0) {
     return res
       .status(422)
