@@ -30,6 +30,9 @@ router.post("/person/new", async (req, res) => {
     waterRunningBrushingTeeth,
   } = req.body;
   const households = await Household.find({ userId: req.user._id });
+  if (!name) {
+    return res.status(422).send({ error: "Must provide a name" });
+  }
   if (households.length === 0) {
     return res
       .status(422)
@@ -85,6 +88,9 @@ router.put("/person/:id", async (req, res) => {
     showerLengthMinutes,
     waterRunningBrushingTeeth,
   } = req.body;
+  if (!name) {
+    return res.status(422).send({ error: "Must provide a name" });
+  }
   const person_id = req.params.id;
   const updatedPerson = await Person.findOneAndUpdate(
     { _id: person_id },
@@ -107,6 +113,9 @@ router.post("/person", async (req, res) => {
     showerLengthMinutes,
     waterRunningBrushingTeeth,
   } = req.body;
+  if (!name) {
+    return res.status(422).send({ error: "Must provide a name" });
+  }
   const households = await Household.find({ userId: req.user._id });
   if (households.length === 0) {
     return res

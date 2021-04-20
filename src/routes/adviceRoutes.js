@@ -107,13 +107,18 @@ router.get("/advice", async (req, res) => {
   averageBathFrequency = Math.round(averageBathFrequency);
   averageShowerFrequency = Math.round(averageShowerFrequency);
 
+  var waterUsedPerCapitaLiters = -1;
+
   const usages = await Usage.find({ householdId: household._id }).sort(
     "year month"
   );
-  const lastUsage = usages[usages.length - 1];
-  const waterUsedPerCapitaLiters = Math.round(
-    (lastUsage.amount * 1000) / (30 * people.length)
-  );
+  if (usages.length > 0) {
+    const lastUsage = usages[usages.length - 1];
+    waterUsedPerCapitaLiters = Math.round(
+      (lastUsage.amount * 1000) / (30 * people.length)
+    );
+  }
+
   advices = advices.sort((a, b) =>
     a.priority > b.priority ? 1 : b.priority > a.priority ? -1 : 0
   );
