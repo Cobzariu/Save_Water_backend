@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "nodemon src/index.js",
-	"tunnel": "ngrok http 3000"
+	  "tunnel": "ngrok http 3000",
+    "start": "node index.js",
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
