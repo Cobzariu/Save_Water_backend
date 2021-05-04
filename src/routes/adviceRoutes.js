@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const requireAuth = require("../middlewares/requireAuth");
 
 const Advice = require("../models/advice");
+const generalAdvices = require("../utils/generalAdvices.js");
 const Usage = mongoose.model("Usage");
 const Person = mongoose.model("Person");
 const Household = mongoose.model("Household");
@@ -20,11 +21,24 @@ router.get("/advice", async (req, res) => {
   var averageShowerLength = 0,
     averageShowerFrequency = 0,
     averageBathFrequency = 0;
+
+  var carWashingLiters = 0,
+    wateringLiters = 0;
   people.forEach((element) => {
     averageShowerLength += element.showerLengthMinutes;
     averageShowerFrequency += element.showerNumberWeek;
     averageBathFrequency += element.bathNumberWeek;
   });
+  const savedLitersShower = averageShowerFrequency * 9;
+  advices.push(
+    new Advice(
+      "You could save " +
+        savedLitersShower +
+        " liters per week if every person reduced their shower length by just one minute",
+      "household",
+      1
+    )
+  );
   averageShowerLength /= people.length;
   averageShowerFrequency /= people.length;
   averageBathFrequency /= people.length;
@@ -101,6 +115,11 @@ router.get("/advice", async (req, res) => {
       );
       advices.push(advice);
     }
+
+    advices.push(...generalAdvices.outdoorAdvices);
+    carWashingLiters = household.washCarNumberWeek * 250;
+    wateringLiters =
+      household.waterGardenNumberWeek * household.waterGardenLength * 12;
   }
   //Statistics
   averageShowerLength = Math.round(averageShowerLength);
@@ -118,7 +137,7 @@ router.get("/advice", async (req, res) => {
       (lastUsage.amount * 1000) / (30 * people.length)
     );
   }
-
+  advices.push(...generalAdvices.indoorAdvices);
   advices = advices.sort((a, b) =>
     a.priority > b.priority ? 1 : b.priority > a.priority ? -1 : 0
   );
@@ -129,6 +148,8 @@ router.get("/advice", async (req, res) => {
       averageBathFrequency,
       averageShowerFrequency,
       waterUsedPerCapitaLiters,
+      carWashingLiters,
+      wateringLiters,
     },
   });
 });
