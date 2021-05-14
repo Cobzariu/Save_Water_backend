@@ -43,6 +43,14 @@ router.get("/advice", async (req, res) => {
   averageShowerFrequency /= people.length;
   averageBathFrequency /= people.length;
   people.forEach((element) => {
+    if (element.waterRunningBrushingTeeth === true) {
+      let advice = new Advice(
+        element.name + " should close the tap while using the sink",
+        "person",
+        2
+      );
+      advices.push(advice);
+    }
     if (element.showerLengthMinutes > averageShowerLength) {
       let advice = new Advice(
         element.name + " should reduce the length of a shower",

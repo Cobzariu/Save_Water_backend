@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const requireAuth = require("../middlewares/requireAuth");
 
+const WaterPoint = require("../models/waterPoint");
 const Usage = mongoose.model("Usage");
+const Person = mongoose.model("Person");
 const Household = mongoose.model("Household");
 const router = express.Router();
 router.use(requireAuth);
@@ -42,6 +44,28 @@ router.get("/statistics/:year", async (req, res) => {
       springAmount,
     },
   });
+});
+
+router.get("/water_points", async (req, res) => {
+  const households = await Household.find({ userId: req.user._id });
+  if (households.length === 0) {
+    return res
+      .status(422)
+      .send({ error: "Could not find household for the user" });
+  }
+  const household = households[0];
+  const people = await Person.find({ householdId: household._id });
+  var waterPoints = [];
+  people.forEach((person) => {
+    const showerPoints = person.showerNumberWeek * person.showerLengthMinutes;
+    const bathPoints = person.bathNumberWeek * 10;
+    var otherPoints = 0;
+    if (person.waterRunningBrushingTeeth === true) otherPoints = 10;
+    waterPoints.push(
+      new WaterPoint(person.name, showerPoints, bathPoints, otherPoints)
+    );
+  });
+  res.send({ waterPoints });
 });
 
 module.exports = router;
