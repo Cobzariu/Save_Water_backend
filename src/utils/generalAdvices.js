@@ -2,7 +2,7 @@ const Advice = require("../models/advice");
 
 indoorAdvices = [
   new Advice("Check for leaks", "general", 3),
-  new Advice("Do not use all the water in the toilet tank", "general", 3),
+  new Advice("Do not use all the water in the toilet tank when flushing", "general", 3),
 ];
 
 outdoorAdvices = [
