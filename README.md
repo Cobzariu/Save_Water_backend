@@ -1,2 +1,6 @@
 # Save Water (back end)
-The server side of Save Water developed using Node.js and MongoDB Cloud.
+The backend part of Save Water.
+
+## Built With
+- NodeJS
+- MongoDB Cloud
