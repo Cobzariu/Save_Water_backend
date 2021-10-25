@@ -23,7 +23,7 @@ app.use(adviceRoutes);
 app.use(statisticsRoutes);
 
 const mongoUri =
-  "mongodb+srv://admin:passwordpassword@cluster0.grsfl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  "MONGO_URI";
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useCreateIndex: true,
